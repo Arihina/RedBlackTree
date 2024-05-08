@@ -61,4 +61,33 @@ public:
 		temp->left = node;
 		node->parent = temp;
 	}
+
+	void rightRotation(NodePointer node)
+	{
+		NodePointer temp = node->left;
+		node->left = temp->right;
+
+		if (temp->right != leaf)
+		{
+			temp->right->parent = node;
+		}
+
+		temp->parent = node->parent;
+
+		if (node->parent == nullptr)
+		{
+			this->root = temp;
+		}
+		else if (node = node->parent->right)
+		{
+			node->parent->right = temp;
+		}
+		else
+		{
+			node->parent->left = temp;
+		}
+
+		temp->right = node;
+		node->parent = temp;
+	}
 };
