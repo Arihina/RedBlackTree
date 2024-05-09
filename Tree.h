@@ -33,6 +33,43 @@ public:
 		root = leaf;
 	}
 
+	NodePointer findMin(NodePointer node)
+	{
+		while (node->left != leaf)
+		{
+			node = node->left;
+		}
+
+		return node;
+	}
+
+	NodePointer findMax(NodePointer node)
+	{
+		while (node->right != leaf)
+		{
+			node = node->right;
+		}
+
+		return node;
+	}
+
+	void switchNode(NodePointer node1, NodePointer node2)
+	{
+		if (node1->parent == nullptr)
+		{
+			root = node2;
+		}
+		else if (node1 == node1->parent->left)
+		{
+			node1->parent->left = node2;
+		}
+		else
+		{
+			node1->parent->right = node2;
+		}
+		node2->parent = node1->parent;
+	}
+
 	void leftRotation(NodePointer node)
 	{
 		NodePointer temp = node->right;
