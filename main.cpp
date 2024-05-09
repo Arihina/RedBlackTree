@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     int countNode = 0;
-    cout << "Enter a count of nodes for AVL Tree ";
+    cout << "Enter a count of nodes for Red - Black Tree ";
     cin >> countNode;
 
     if (countNode <= 0)
@@ -26,7 +26,7 @@ int main()
     }
 
     cout << "Red - Black Tree" << endl;
-    tree.print();
+    tree.printValue();
     cout << endl;
     cin >> countNode;
 }

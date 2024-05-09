@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 
 class Node;
 class Tree;
@@ -400,7 +401,7 @@ public:
 		}
 	}
 
-	void print()
+	void printValue()
 	{
 		byPass(root);
 	}
