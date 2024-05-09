@@ -11,4 +11,5 @@ int main()
 	tree.insert(34);
 	tree.insert(14);
 	tree.insert(3);
+	tree.remove(1);
 }

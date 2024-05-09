@@ -86,7 +86,7 @@ public:
 		{
 			this->root = temp;
 		}
-		else if (node = node->parent->left)
+		else if (node == node->parent->left)
 		{
 			node->parent->left = temp;
 		}
@@ -115,7 +115,7 @@ public:
 		{
 			this->root = temp;
 		}
-		else if (node = node->parent->right)
+		else if (node == node->parent->right)
 		{
 			node->parent->right = temp;
 		}
@@ -188,6 +188,82 @@ public:
 
 		root->color = 0;
 	}
+
+	void fixAfterRemove(NodePointer node)
+	{
+		NodePointer temp;
+		while (node != root && node->color == 0)
+		{
+			if (node == node->parent->left)
+			{
+				temp = node->parent->right;
+
+				if (temp->color == 1)
+				{
+					temp->color = 0;
+					node->parent->color = 1;
+					leftRotation(node->parent);
+					temp = node->parent->right;
+				}
+
+				if (temp->left->color == 0 && temp->right->color == 0)
+				{
+					temp->color = 1;
+					node = node->parent;
+				}
+				else
+				{
+					if (temp->right->color == 0)
+					{
+						temp->left->color = 0;
+						temp->color = 1;
+						rightRotation(temp);
+						temp = node->parent->right;
+					}
+
+					temp->color = node->parent->color;
+					node->parent->color = 0;
+					temp->right->color = 0;
+					leftRotation(node->parent);
+					node = root;
+				}
+			}
+			else
+			{
+				temp = node->parent->left;
+				if (temp->color == 1)
+				{
+					temp->color = 0;
+					node->parent->color = 1;
+					rightRotation(node->parent);
+					temp = node->parent->left;
+				}
+
+				if (temp->right->color == 0 && temp->left->color == 0)
+				{
+					temp->color = 1;
+					node = node->parent;
+				}
+				else
+				{
+					if (temp->left->color == 0)
+					{
+						temp->right->color = 0;
+						temp->color = 1;
+						leftRotation(temp);
+						temp = node->parent->left;
+					}
+
+					temp->color = node->parent->color;
+					node->parent->color = 0;
+					temp->left->color = 0;
+					rightRotation(node->parent);
+					node = root;
+				}
+			}
+		}
+		node->color = 0;
+	}
 	
 	void insert(int value)
 	{
@@ -241,5 +317,91 @@ public:
 		}
 
 		fixAfterInsert(node);
+	}
+
+	void remove(int value)
+	{
+		NodePointer node = leaf;
+		NodePointer nodeRoot = root;
+
+		while (nodeRoot != leaf)
+		{
+			if (nodeRoot->value == value)
+			{
+				node = nodeRoot;
+				break;
+			}
+
+			if (node->value > value)
+			{
+				nodeRoot = nodeRoot->right;
+			}
+			else
+			{
+				nodeRoot = nodeRoot->left;
+			}
+		}
+
+		if (node == leaf)
+		{
+			cout << "Impossible to find this value in the tree" << endl;
+			exit(1);
+		}
+
+		NodePointer temp1, temp2;
+		temp2 = node;
+		int copyColor = temp2->color;
+
+		if (node->left == leaf)
+		{
+			temp1 = node->right;
+			switchNode(node, node->right);
+		}
+		else if (node->right == leaf)
+		{
+			temp1 = node->left;
+			switchNode(node, node->left);
+		}
+		else
+		{
+			temp2 = findMin(node->left);
+			copyColor = temp2->color;
+			temp1 = temp2->right;
+
+			if (temp2->parent == node)
+			{
+				temp1->parent = temp2;
+			}
+			else
+			{
+				switchNode(temp2, temp2->right);
+				temp2->right = node->right;
+				temp2->right->parent = temp2;
+			}
+
+			switchNode(node, temp2);
+			temp2->left = node->left;
+			temp2->left->parent = temp2;
+			temp2->color = node->color;
+		}
+
+		delete node;
+		if (copyColor == 0)
+		{
+			fixAfterRemove(temp1);
+		}
+	}
+
+	void byPass(NodePointer node) {
+		if (node != leaf) {
+			cout << node->value << " ";
+			byPass(node->left);
+			byPass(node->right);
+		}
+	}
+
+	void print()
+	{
+		byPass(root);
 	}
 };
