@@ -74,7 +74,7 @@ public:
 	void leftRotation(NodePointer node)
 	{
 		NodePointer temp = node->right;
-		node->right = node->left;
+		node->right = temp->left;
 
 		if (temp->left != leaf)
 		{
